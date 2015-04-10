@@ -61,6 +61,31 @@ app.set('view engine', 'handlebars');
 /*******************************************************************************
 * Routes
 *******************************************************************************/
+// Renders home
+app.get('/', function(req, res){
+    res.render('home', {user: req.user});
+});
+
+// Renders signin
+app.get('/signin', function(req, res){
+    res.render('signin');
+});
+
+// Local sign-in strategy
+app.post('/login', passport.authenticate('local-signin', { 
+        successRedirect: '/',
+        failureRedirect: '/signin'
+    })
+);
+
+// Logout
+app.get('/logout', function(req, res){
+    var name = req.user.username;
+    console.log("LOGGIN OUT " + req.user.username)
+    req.logout();
+    res.redirect('/');
+    req.session.notice = "You have successfully been logged out " + name + "!";
+});
 
 /*******************************************************************************
 * Port
